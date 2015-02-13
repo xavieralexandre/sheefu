@@ -140,7 +140,6 @@ module feet_top_joinery(){
 	mirror([0,1,0]) mirror([1,0,0]) foot_top_outside_joinery();
 }
 
-% feet_top_joinery();
 
 module feet_bottom_joinery(){
 	foot_bottom_joinery();
@@ -149,18 +148,26 @@ module feet_bottom_joinery(){
 	mirror([0,1,0]) mirror([1,0,0]) foot_bottom_joinery();
 }
 
-% feet_bottom_joinery();
 
-module feet_bottom_joinery_only(){
+module foot_bottom_joinery_only(){
 	difference(){
-		feet_bottom_joinery();
+		foot_bottom_joinery();
 		boards();
 	}
 }
-// feet_bottom_joinery_only();
+// foot_bottom_joinery_only();
+
+module foot_top_outside_joinery_only(){
+	difference(){
+		foot_top_outside_joinery();
+		boards();
+	}
+}
+// foot_top_outside_joinery_only();
 
 module bench(){
-	foot_bottom_joinery();
+	% feet_bottom_joinery();
+	% feet_top_joinery();
 	boards();
 }
 
