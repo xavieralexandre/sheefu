@@ -1,5 +1,5 @@
 // Display mode
-mode = "bench"; // ["joinery", "bench", "all"]
+mode = "all"; // ["joinery", "bench", "all"]
 
 // Bench dimensions
 // (mm)
@@ -220,7 +220,7 @@ module left_joinery(){
 		translate([-30-average_bottom_spacing/2,bench_length/2-min_unsupported_wall_thickness-joint_length,0])
 		foot_bottom_joinery_only();
 	
-		translate(-top_outside_corner-[-min_unsupported_wall_thickness-separator,separator,0])
+		translate(-top_outside_corner-[-min_unsupported_wall_thickness-min_separation,min_separation,0])
 		foot_top_outside_joinery_only();
 	}
 	outside_joinery();
