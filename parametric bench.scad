@@ -1,3 +1,5 @@
+mode = "bench"; // "joinery" "bench"
+
 // Bench dimensions
 // (mm)
 bench_length=430; // [0:1000]
@@ -31,7 +33,7 @@ min_unsupported_wall_thickness=1;
 // Top-spacing of feet relative to seating_depth
 outside_feet_top_spacing_ratio=1;  // [0:1] 
 outside_feet_top_spacing=min(seating_depth*outside_feet_top_spacing_ratio,seating_depth-board_thickness);
-inside_feet_top_spacing=board_thickness+min_unsupported_wall_thickness; // Depending of way feet are joined to the seating board it might be better to space feet in order to better distribute the weight. Here they are kept together to avoid them sliding toward each other. Spacing is a bit overestimated since it doesn't take angle into account.
+inside_feet_top_spacing=board_thickness; // Depending of way feet are joined to the seating board it might be better to space feet in order to better distribute the weight. Here they are kept together to avoid them sliding toward each other. Spacing is a bit overestimated since it doesn't take angle into account.
 
 // Bottom
 outside_feet_bottom_spacing_ratio=.8; 
@@ -98,11 +100,12 @@ module board(){
 	square([board_width,bench_length],center=true);
 }
 
-//Joint
+//Joinery
 joint_length=20; //mm
 joinery_offset_lengthwise=min_unsupported_wall_thickness; //mm
 joinery_thickness=min_unsupported_wall_thickness; //mm
 feet_joint_height=.025*outside_feet_length+min_unsupported_wall_thickness;
+
 
 
 module foot_bottom_joinery(){
@@ -136,10 +139,10 @@ module foot_top_outside_joinery(){
 module foot_top_inside_joinery(){
 	a=[-board_thickness-joinery_thickness,joinery_thickness];
 	b=[board_thickness+joinery_thickness,joinery_thickness];
-	c=[board_thickness+joinery_thickness,-board_thickness-min_unsupported_wall_thickness];
+	c=[board_thickness+joinery_thickness,-board_thickness];
 	d=[board_thickness+joinery_thickness+feet_joint_height/tan(inside_feet_angle),-feet_joint_height-board_thickness];
 	e=[-board_thickness-joinery_thickness-feet_joint_height/tan(inside_feet_angle),-feet_joint_height-board_thickness];
-	f=[-board_thickness-joinery_thickness,-board_thickness-min_unsupported_wall_thickness];
+	f=[-board_thickness-joinery_thickness,-board_thickness];
 	translate([0,-bench_length/2+joint_length,seating_height])
 	rotate([90,0,0])
 	
@@ -152,6 +155,15 @@ module feet_top_inside_joinery(){
 	foot_top_inside_joinery();
 	mirror([0,1,0]) foot_top_inside_joinery();
 }
+
+module foot_top_inside_joinery_only(){
+	difference(){
+		foot_top_inside_joinery();
+		boards();
+	}
+}
+
+// foot_top_inside_joinery_only();
 
 module feet_bottom_joinery(){
 	foot_bottom_joinery();
@@ -190,9 +202,39 @@ module bench(){
 	boards();
 }
 
-bench();
+module left_joinery(){
+	
+	module outside_joinery(){
+		translate([-30-average_bottom_spacing/2,bench_length/2-min_unsupported_wall_thickness-joint_length,0])
+		foot_bottom_joinery_only();
+	
+		translate([-30+outside_feet_top_spacing/2,bench_length/2-min_unsupported_wall_thickness-joint_length,-seating_height+board_thickness+feet_joint_height+2*feet_joint_height])
+		foot_top_outside_joinery_only();
+	}
+	outside_joinery();
+	
+	mirror([1,0,0]) outside_joinery();
+	
+	module inside_joinery(){
+		translate([0,bench_length/2-min_unsupported_wall_thickness-joint_length,-seating_height+board_thickness+feet_joint_height+2*feet_joint_height])
+		foot_top_inside_joinery_only();
+	}
+	inside_joinery();
+}
 
+module joinery(){
+	left_joinery();
+	mirror([0,1,0]) left_joinery();
+}
 
+if (mode == "joinery") {
+	joinery(); 
+} else if (mode == "bench") { 
+	bench(); 
+} else {
+	bench(); 
+	joinery();
+}
 
 
 //Surface, weight & price
