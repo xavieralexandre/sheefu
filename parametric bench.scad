@@ -1,5 +1,5 @@
 // Display mode
-mode = "all"; // ["joinery", "bench", "all"]
+mode = "joinery"; // ["joinery", "bench", "all"]
 
 // Bench dimensions
 // (mm)
@@ -141,7 +141,7 @@ module foot_top_outside_joinery(){
 	rotate([90,0,0])
 	
 	linear_extrude(joint_length+joinery_offset_lengthwise)
-	polygon([a,b,c,d,e,f]);
+	polygon([a,b,d,e,f]);
 
 }
 
@@ -158,7 +158,7 @@ module foot_top_inside_joinery(){
 	rotate([90,0,0])
 	
 	linear_extrude(joint_length+joinery_offset_lengthwise)
-	polygon([a,b,c,d,e,f]);
+	polygon([a,b,d,e]);
 
 }
 
