@@ -24,7 +24,7 @@ volumetric_mass_density=450; // kg.m^.3
 // 3D printing properties
 // (mm)
 min_unsupported_wall_thickness=.7;
-min_separation=1; // mm Avoid parts to stick to each other
+min_separation=2; // mm Avoid parts to stick to each other
 
 //Joinery
 joint_length=20; //mm
