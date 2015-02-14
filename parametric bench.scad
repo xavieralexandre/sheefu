@@ -133,13 +133,25 @@ module foot_top_outside_joinery(){
 
 }
 
-module feet_top_joinery(){
-	foot_top_outside_joinery();
-	mirror([0,1,0]) foot_top_outside_joinery();
-	mirror([1,0,0]) foot_top_outside_joinery();
-	mirror([0,1,0]) mirror([1,0,0]) foot_top_outside_joinery();
+module foot_top_inside_joinery(){
+	a=[-board_thickness-joinery_thickness,joinery_thickness];
+	b=[board_thickness+joinery_thickness,joinery_thickness];
+	c=[board_thickness+joinery_thickness,-board_thickness-min_unsupported_wall_thickness];
+	d=[board_thickness+joinery_thickness+feet_joint_height/tan(inside_feet_angle),-feet_joint_height-board_thickness];
+	e=[-board_thickness-joinery_thickness-feet_joint_height/tan(inside_feet_angle),-feet_joint_height-board_thickness];
+	f=[-board_thickness-joinery_thickness,-board_thickness-min_unsupported_wall_thickness];
+	translate([0,-bench_length/2+joint_length,seating_height])
+	rotate([90,0,0])
+	
+	linear_extrude(joint_length+joinery_offset_lengthwise)
+	polygon([a,b,c,d,e,f]);
+
 }
 
+module feet_top_inside_joinery(){
+	foot_top_inside_joinery();
+	mirror([0,1,0]) foot_top_inside_joinery();
+}
 
 module feet_bottom_joinery(){
 	foot_bottom_joinery();
@@ -148,7 +160,6 @@ module feet_bottom_joinery(){
 	mirror([0,1,0]) mirror([1,0,0]) foot_bottom_joinery();
 }
 
-
 module foot_bottom_joinery_only(){
 	difference(){
 		foot_bottom_joinery();
@@ -156,6 +167,13 @@ module foot_bottom_joinery_only(){
 	}
 }
 // foot_bottom_joinery_only();
+
+module feet_top_joinery(){
+	foot_top_outside_joinery();
+	mirror([0,1,0]) foot_top_outside_joinery();
+	mirror([1,0,0]) foot_top_outside_joinery();
+	mirror([0,1,0]) mirror([1,0,0]) foot_top_outside_joinery();
+}
 
 module foot_top_outside_joinery_only(){
 	difference(){
@@ -168,6 +186,7 @@ module foot_top_outside_joinery_only(){
 module bench(){
 	% feet_bottom_joinery();
 	% feet_top_joinery();
+	% feet_top_inside_joinery();
 	boards();
 }
 
