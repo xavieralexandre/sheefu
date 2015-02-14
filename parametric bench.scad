@@ -1,4 +1,4 @@
-mode = "bench"; // "joinery" "bench"
+mode = "joinery"; // "joinery" "bench"
 
 // Bench dimensions
 // (mm)
